@@ -9,6 +9,18 @@
 </div>
 
 <div class="row">
+    <div class="col-md-12">
+        <h2>Søg produkter</h2>
+        <input type="text" name="txtSearch" id="txtSearch" />
+
+        <div class="products">
+          
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
     <div class="col-md-4">
         <h2>Getting started</h2>
         <p>
@@ -29,3 +41,62 @@
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
 </div>
+
+@section scripts {
+   <script id="ProductTemplate" type="x-tmpl-mustache">
+       <div class="product">
+           <h3>
+                <a href="{{productLink}}">{{productName}}</a>
+           </h3>
+           <label>Beskrivelse</label> {{productDescription}}
+       </div>
+    </script>
+
+    <script type="text/javascript" src="~/Scripts/mustache.js"></script>
+    <script type="text/javascript">
+        // Prøv at få minprice og maxprice med også
+
+        var products = $(".products"),
+            productTemplate = $("#ProductTemplate").html(),
+            txtSearch = $("#txtSearch");
+
+        Mustache.parse(productTemplate);// optional, speeds up future uses
+
+        // udfører event ved tryk på tegn på tastetur
+        txtSearch.keyup(function () {
+            products.html("");
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Search", "Search")",
+                data: {
+                    name: txtSearch.val(), // værdi fra tekstboks
+                    minPrice: 0,
+                    maxPrice: 999999999999
+                },
+                success: function (data) {
+                    if (data != null) {
+
+                        // looper alle produkter fra JSON-response
+                        $.each(data.products, function (i, product) {
+
+                            // Gør data klar til template
+                            var rendered = Mustache.render(productTemplate, {
+                                productName: product.Name,
+                                productDescription: product.Description,
+                                productCategory: product.CategoryName,
+                                productLink: product.Link
+                            });
+
+                            // Indsætter templete
+                            products.append(rendered);
+                        });
+
+                    }
+                }
+            });
+        });
+
+      
+
+    </script>
+}

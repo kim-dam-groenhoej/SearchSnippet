@@ -22,3 +22,19 @@ select,
 textarea {
     max-width: 280px;
 }
+
+#txtSearch {
+    margin: 0 0 10px 0;
+    border: 1px solid #000000;
+    font-weight: bold;
+}
+
+.product {
+    background: #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.product h3 a {
+    color: #000;
+}
