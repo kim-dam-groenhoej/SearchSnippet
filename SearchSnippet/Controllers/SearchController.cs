@@ -27,7 +27,7 @@ namespace SearchSnippet.Controllers
             try
             {
                 var db = new SearchContext();
-                foundProducts = db.Products.Where(p => p.Name.ToLower().Contains(name) || 
+                foundProducts = db.Products.Where(p => p.Name.ToLower().Contains(name.ToLower()) || 
                                   (minPrice.HasValue ? p.Price < minPrice : true
                                 && maxPrice.HasValue ? p.Price > maxPrice : true)).ToList();
 
