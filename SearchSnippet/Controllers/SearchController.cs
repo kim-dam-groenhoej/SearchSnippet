@@ -27,9 +27,9 @@ namespace SearchSnippet.Controllers
             try
             {
                 var db = new SearchContext();
-                foundProducts = db.Products.Where(p => p.Name.ToLower().Contains(name.ToLower()) || 
-                                  (minPrice.HasValue ? p.Price < minPrice : true
-                                && maxPrice.HasValue ? p.Price > maxPrice : true)).ToList();
+                foundProducts = db.Products.Where(p => p.Name.ToLower().Contains(name.ToLower()) && 
+                                  (minPrice.HasValue ? p.Price >= minPrice : true
+                                && maxPrice.HasValue ? p.Price <= maxPrice : true)).ToList();
 
                 success = true;
             } catch (Exception ex)
@@ -48,6 +48,7 @@ namespace SearchSnippet.Controllers
                            {
                                fp.Name,
                                fp.Description,
+                               fp.Price,
                                CategoryName = fp.Category.Name,
                                Link = Url.Action("Details", "Product", new { id = fp.ID })
                            }

@@ -11,7 +11,12 @@
 <div class="row">
     <div class="col-md-12">
         <h2>Søg produkter</h2>
-        <input type="text" name="txtSearch" id="txtSearch" />
+        <input type="text" name="txtSearch" id="txtSearch" /><br />
+        Min: <input type="text" name="txtMinPrice" id="txtMinPrice" /><br />
+        Max: <input type="text" name="txtMaxPrice" id="txtMaxPrice" />
+        <button id="btnSearch">
+            Søg
+        </button>
 
         <div class="products">
           
@@ -49,6 +54,7 @@
                 <a href="{{productLink}}">{{productName}}</a>
            </h3>
            <label>Beskrivelse</label> {{productDescription}}
+           <lable>Pris</lable> {{productPrice}}
        </div>
     </script>
 
@@ -58,9 +64,18 @@
 
         var products = $(".products"),
             productTemplate = $("#ProductTemplate").html(),
-            txtSearch = $("#txtSearch");
+            txtSearch = $("#txtSearch, #txtMaxPrice, #txtMinPrice"),
+            txtMaxPrice = $("#txtMaxPrice"),
+            txtMinPrice = $("#txtMinPrice");
+            //btnSearch = $("#btnSearch");
 
         Mustache.parse(productTemplate);// optional, speeds up future uses
+
+        //txtSearch.keyup(function (e) {
+        //    if (e.keyCode == 13) {
+        //        btnSearch.click();
+        //    }
+        //});
 
         // udfører event ved tryk på tegn på tastetur
         txtSearch.keyup(function () {
@@ -70,8 +85,8 @@
                 url: "@Url.Action("Search", "Search")",
                 data: {
                     name: txtSearch.val(), // værdi fra tekstboks
-                    minPrice: 0,
-                    maxPrice: 999999999999
+                    minPrice: txtMinPrice.val(),
+                    maxPrice: txtMaxPrice.val()
                 },
                 success: function (data) {
                     if (data != null) {
@@ -84,7 +99,8 @@
                                 productName: product.Name,
                                 productDescription: product.Description,
                                 productCategory: product.CategoryName,
-                                productLink: product.Link
+                                productLink: product.Link,
+                                productPrice: product.Price
                             });
 
                             // Indsætter templete
